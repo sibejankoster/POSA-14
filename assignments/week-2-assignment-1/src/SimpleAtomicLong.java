@@ -21,14 +21,14 @@ class SimpleAtomicLong
      * The ReentrantReadWriteLock used to serialize access to mValue.
      */
     // TODO - replace the null with the appropriate initialization:
-    private ReentrantReadWriteLock mRWLock = null;
+    private ReentrantReadWriteLock mRWLock = new ReentrantReadWriteLock();
 
     /**
      * Creates a new SimpleAtomicLong with the given initial value.
      */
     public SimpleAtomicLong(long initialValue)
     {
-        // TODO - you fill in here
+        mValue = initialValue;// TODO - you fill in here    
     }
 
     /**
@@ -39,7 +39,9 @@ class SimpleAtomicLong
     public long get()
     {
         long value;
-        // TODO - you fill in here, using a readLock()
+        this.mRWLock.readLock().lock();
+        value = mValue;
+        this.mRWLock.readLock().unlock();
         return value;
     }
 
@@ -51,6 +53,9 @@ class SimpleAtomicLong
     public long decrementAndGet()
     {
         long value;
+        this.mRWLock.writeLock().lock();
+        value = --mValue;
+        this.mRWLock.writeLock().unlock();
         // TODO - you fill in here, using a writeLock()
         return value;
     }
@@ -63,6 +68,9 @@ class SimpleAtomicLong
     public long getAndIncrement()
     {
         long value;
+        this.mRWLock.writeLock().lock();
+        value = ++mValue;
+        this.mRWLock.writeLock().unlock();
         // TODO - you fill in here, using a writeLock()
         return value;
     }
@@ -75,7 +83,9 @@ class SimpleAtomicLong
     public long getAndDecrement()
     {
         long value;
-        // TODO - you fill in here, using a writeLock()
+        this.mRWLock.readLock().lock();
+        value = mValue--;
+        this.mRWLock.readLock().unlock();        // TODO - you fill in here, using a writeLock()
         return value;
     }
 
@@ -87,8 +97,10 @@ class SimpleAtomicLong
     public long incrementAndGet()
     {
         long value;
+        this.mRWLock.readLock().lock();
+        value = mValue++;
+        this.mRWLock.readLock().unlock();
         // TODO - you fill in here, using a writeLock()
         return value;
     }
 }
-
